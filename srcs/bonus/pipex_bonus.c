@@ -6,7 +6,7 @@
 /*   By: mel-rhay <mel-rhay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:58:16 by mel-rhay          #+#    #+#             */
-/*   Updated: 2024/01/05 20:43:14 by mel-rhay         ###   ########.fr       */
+/*   Updated: 2024/01/06 18:55:40 by mel-rhay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ void	ft_pipex(t_pipex *pipex, char **av)
 	{
 		if (pipe(pipex->fd) == -1)
 			exit(3);
-		pipex->command = get_command(av[pipex->i + 2]);
+		if (pipex->here_doc)
+			pipex->command = get_command(av[pipex->i + 3]);
+		else
+			pipex->command = get_command(av[pipex->i + 2]);
 		pipex->pid = fork();
 		if (pipex->pid == -1)
 			exit(4);
@@ -96,9 +99,6 @@ int	main(int ac, char **av)
 	if (ac >= 5)
 	{
 		check_here_doc(&pipex, av, ac);
-		pipex.input_fd = open(av[1], O_RDONLY, 0777);
-		if (pipex.input_fd < 0)
-			exit(1);
 		pipex.output_fd = open(av[ac - 1], O_WRONLY | O_TRUNC | O_CREAT, 0777);
 		if (pipex.output_fd < 0)
 			exit(1);

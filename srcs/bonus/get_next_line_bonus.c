@@ -6,7 +6,7 @@
 /*   By: mel-rhay <mel-rhay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:45:49 by mel-rhay          #+#    #+#             */
-/*   Updated: 2023/12/13 14:00:28 by mel-rhay         ###   ########.fr       */
+/*   Updated: 2024/01/06 18:00:16 by mel-rhay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*get_next_line(int fd)
 {
 	char			*next_line;
-	static t_list	*lst[FD_MAX];
+	static t_lst	*lst[FD_MAX];
 	size_t			index;
 
 	if (fd < 0 || fd >= FD_MAX || BUFFER_SIZE <= 0 || BUFFER_SIZE >= INT_MAX)
@@ -29,7 +29,7 @@ char	*get_next_line(int fd)
 	return (next_line);
 }
 
-char	*assemble_line(t_list *lst)
+char	*assemble_line(t_lst *lst)
 {
 	char	*line;
 	int		len;
@@ -58,7 +58,7 @@ char	*assemble_line(t_list *lst)
 	return (line);
 }
 
-size_t	line_len(t_list *lst)
+size_t	line_len(t_lst *lst)
 {
 	size_t	len;
 	size_t	i;
@@ -81,7 +81,7 @@ size_t	line_len(t_list *lst)
 	return (len);
 }
 
-void	make_list(t_list **lst, int fd)
+void	make_list(t_lst **lst, int fd)
 {
 	char	*buff;
 	ssize_t	num_read;
@@ -102,13 +102,13 @@ void	make_list(t_list **lst, int fd)
 	}
 }
 
-void	add_node(t_list **lst, char *buff, int fd)
+void	add_node(t_lst **lst, char *buff, int fd)
 {
-	t_list	*new_node;
-	t_list	*last_node;
+	t_lst	*new_node;
+	t_lst	*last_node;
 
-	last_node = ft_lstlast(lst[fd]);
-	new_node = malloc((sizeof(t_list)));
+	last_node = ft_listlast(lst[fd]);
+	new_node = malloc((sizeof(t_lst)));
 	if (!new_node)
 		return ;
 	if (!last_node)

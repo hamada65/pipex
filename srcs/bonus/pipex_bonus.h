@@ -6,7 +6,7 @@
 /*   By: mel-rhay <mel-rhay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:58:33 by mel-rhay          #+#    #+#             */
-/*   Updated: 2024/01/05 20:41:14 by mel-rhay         ###   ########.fr       */
+/*   Updated: 2024/01/06 17:57:39 by mel-rhay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PIPEX_BONUS_H
 
 # include "../libft/libft.h"
+# include "get_next_line_bonus.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>

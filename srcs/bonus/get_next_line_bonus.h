@@ -6,7 +6,7 @@
 /*   By: mel-rhay <mel-rhay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:45:58 by mel-rhay          #+#    #+#             */
-/*   Updated: 2023/12/13 13:59:35 by mel-rhay         ###   ########.fr       */
+/*   Updated: 2024/01/06 18:00:56 by mel-rhay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,20 @@
 #  define BUFFER_SIZE 42L
 # endif
 
-typedef struct s_list
+typedef struct s_lst
 {
 	char			*buff;
-	struct s_list	*next;
-}					t_list;
+	struct s_lst	*next;
+}					t_lst;
 
 char				*get_next_line(int fd);
-void				make_list(t_list **lst, int fd);
-int					search_line(t_list *lst);
-void				add_node(t_list **lst, char *buff, int fd);
-t_list				*ft_lstlast(t_list *lst);
-char				*assemble_line(t_list *lst);
-size_t				line_len(t_list *lst);
-void				del_nodes(t_list **lst, size_t i, int fd);
+void				make_list(t_lst **lst, int fd);
+int					search_line(t_lst *lst);
+void				add_node(t_lst **lst, char *buff, int fd);
+t_lst				*ft_listlast(t_lst *lst);
+char				*assemble_line(t_lst *lst);
+size_t				line_len(t_lst *lst);
+void				del_nodes(t_lst **lst, size_t i, int fd);
 int					check_node(char *s);
 size_t				ft_strlen(const char *s);
 void				trim_word(char *dst, const char *src, size_t size);

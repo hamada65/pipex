@@ -6,20 +6,20 @@
 /*   By: mel-rhay <mel-rhay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:45:54 by mel-rhay          #+#    #+#             */
-/*   Updated: 2023/12/13 13:59:59 by mel-rhay         ###   ########.fr       */
+/*   Updated: 2024/01/06 18:00:10 by mel-rhay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-t_list	*ft_lstlast(t_list *lst)
+t_lst	*ft_listlast(t_lst *lst)
 {
 	while (lst && lst->next)
 		lst = lst->next;
 	return (lst);
 }
 
-int	search_line(t_list *lst)
+int	search_line(t_lst *lst)
 {
 	long	i;
 
@@ -55,9 +55,9 @@ int	check_node(char *s)
 	return (0);
 }
 
-void	del_nodes(t_list **lst, size_t i, int fd)
+void	del_nodes(t_lst **lst, size_t i, int fd)
 {
-	t_list	*tmp;
+	t_lst	*tmp;
 
 	while (lst[fd])
 	{
