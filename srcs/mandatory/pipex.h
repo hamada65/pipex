@@ -6,7 +6,7 @@
 /*   By: mel-rhay <mel-rhay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:58:33 by mel-rhay          #+#    #+#             */
-/*   Updated: 2024/01/05 20:38:38 by mel-rhay         ###   ########.fr       */
+/*   Updated: 2024/01/07 21:37:11 by mel-rhay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,5 @@ typedef struct s_pipex
 }			t_pipex;
 
 void	free_2d_array(char **str);
-
+char	**ft_split_command(char *arg);
 #endif // Pipex.h
