@@ -6,7 +6,7 @@
 /*   By: mel-rhay <mel-rhay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:22:20 by mel-rhay          #+#    #+#             */
-/*   Updated: 2024/01/07 21:54:24 by mel-rhay         ###   ########.fr       */
+/*   Updated: 2024/01/08 09:45:29 by mel-rhay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,30 +48,24 @@ char	*ft_command_join(char const *s1, char const *s2)
 char	**ft_dup(char **tmp, int count)
 {
 	char	**args;
-	char 	*tmp_string;
+	char	*tmp_string;
 	int		i;
 	int		j;
 
 	args = (char **)malloc(sizeof(char *) * (count + 1));
 	i = 0;
 	j = 0;
-	printf("count: %d\n", count);
 	while (tmp[i])
 	{
 		if (ft_strchr(tmp[i], '\''))
 		{
-			printf("A: %s\n", tmp[i]);
 			tmp_string = ft_strtrim(tmp[i], "\'");
-			args[j] = tmp_string;
-			j++;
-			i++;
+			args[j++] = tmp_string;
+			if (tmp[i + 1] && ft_strchr(tmp[i + 1], '\''))
+				i++;
 		}
 		else
-		{
-			printf("B: %s\n", tmp[i]);
-			args[j] = ft_strdup(tmp[i]);
-			j++;
-		}
+			args[j++] = ft_strdup(tmp[i]);
 		i++;
 	}
 	args[j] = NULL;
@@ -91,7 +85,8 @@ char	**ft_split_command(char *arg)
 	count = 0;
 	while (tmp[i])
 	{
-		if (tmp[i + 1] && ft_strchr(tmp[i], '\'') && ft_strchr(tmp[i + 1], '\''))
+		if (tmp[i + 1] && ft_strchr(tmp[i], '\'')
+			&& ft_strchr(tmp[i + 1], '\''))
 		{
 			tmp_string = ft_command_join(tmp[i], tmp[i + 1]);
 			free(tmp[i]);
@@ -102,4 +97,26 @@ char	**ft_split_command(char *arg)
 		i++;
 	}
 	return (ft_dup(tmp, i - count));
+}
+
+void	free_everything(char **tmp, char *command, char *tmp2, char *path)
+{
+	int	i;
+
+	i = 0;
+	if (command)
+		free(command);
+	if (tmp2)
+		free(tmp2);
+	if (path)
+		free(path);
+	if (tmp)
+	{
+		while (tmp[i])
+		{
+			free(tmp[i]);
+			i++;
+		}
+		free(tmp);
+	}
 }

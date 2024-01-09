@@ -9,6 +9,7 @@ SRCS =  srcs/mandatory/pipex.c \
 		srcs/libft/ft_putnbr_fd.c srcs/libft/ft_strtrim.c  srcs/libft/ft_striteri.c
 SRCS_BONUS =  srcs/bonus/pipex_bonus.c \
 		srcs/bonus/pipex_utils_bonus.c \
+		srcs/bonus/pipex_here_doc.c \
 		srcs/bonus/get_next_line_bonus.c \
 		srcs/bonus/get_next_line_utils_bonus.c \
 		srcs/libft/ft_isalpha.c srcs/libft/ft_isdigit.c srcs/libft/ft_isalnum.c srcs/libft/ft_isascii.c srcs/libft/ft_isprint.c srcs/libft/ft_strlen.c \
@@ -45,5 +46,3 @@ fclean: clean
 	${RM} ${NAME} ${NAME_BONUS}
 
 re: fclean all
-
-rebonus: fclean bonus

@@ -6,43 +6,55 @@
 /*   By: mel-rhay <mel-rhay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:58:16 by mel-rhay          #+#    #+#             */
-/*   Updated: 2024/01/06 18:55:40 by mel-rhay         ###   ########.fr       */
+/*   Updated: 2024/01/08 10:18:27 by mel-rhay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	free_and_exit(char *path, char **command)
+int	check_envp(char *envp, char **command)
 {
-	free(path);
-	free_2d_array(command);
-	exit(1);
+	char	**tmp;
+	char	*path;
+	char	*tmp2;
+	int		i;
+
+	i = 0;
+	tmp = ft_split(envp, ':');
+	while (tmp[i])
+	{
+		tmp2 = ft_strjoin("/", command[0]);
+		path = ft_strjoin(tmp[i], tmp2);
+		if (access(path, R_OK) != -1)
+		{
+			free_everything(tmp, command[0], tmp2, NULL);
+			command[0] = path;
+			return (1);
+		}
+		free_everything(NULL, NULL, tmp2, path);
+		i++;
+	}
+	free_everything(tmp, NULL, NULL, NULL);
+	return (0);
 }
 
-char	**get_command(char *arg)
+char	**get_command(char *arg, char **envp)
 {
 	char	**command;
-	char	*path;
 
-	command = ft_split(arg, ' ');
+	command = ft_split_command(arg);
 	if (access(command[0], R_OK) != -1)
 		return (command);
-	path = ft_strjoin("/bin/", command[0]);
-	if (access(path, R_OK) != -1)
+	while (*envp)
 	{
-		free(command[0]);
-		command[0] = path;
-		return (command);
+		if (ft_strncmp(*envp, "PATH=", 5) == 0)
+		{
+			if (check_envp(*envp, command))
+				return (command);
+			break ;
+		}
+		envp++;
 	}
-	free(path);
-	path = ft_strjoin("/usr/bin/", command[0]);
-	if (access(path, R_OK) != -1)
-	{
-		free(command[0]);
-		command[0] = path;
-		return (command);
-	}
-	free_and_exit(path, command);
 	return (command);
 }
 
@@ -60,39 +72,36 @@ void	change_output(t_pipex *pipex)
 	}
 }
 
-void	ft_pipex(t_pipex *pipex, char **av)
+void	ft_pipex(t_pipex *pipex, char **av, char **envp)
 {
 	while (pipex->i < pipex->commands_count)
 	{
 		if (pipe(pipex->fd) == -1)
 			exit(3);
 		if (pipex->here_doc)
-			pipex->command = get_command(av[pipex->i + 3]);
+			pipex->command = get_command(av[pipex->i + 3], envp);
 		else
-			pipex->command = get_command(av[pipex->i + 2]);
+			pipex->command = get_command(av[pipex->i + 2], envp);
 		pipex->pid = fork();
 		if (pipex->pid == -1)
 			exit(4);
 		if (pipex->pid == 0)
 		{
 			change_output(pipex);
-			close(pipex->fd[0]);
-			close(pipex->fd[1]);
+			ft_close_fd(pipex->fd[0], pipex->fd[1]);
 			execve(pipex->command[0], pipex->command, NULL);
 			exit(1);
 		}
 		waitpid(pipex->pid, &pipex->exit_status, 0);
 		dup2(pipex->fd[0], 0);
-		close(pipex->fd[0]);
-		close(pipex->fd[1]);
+		ft_close_fd(pipex->fd[0], pipex->fd[1]);
 		free_2d_array(pipex->command);
 		pipex->i++;
 	}
-	close(pipex->input_fd);
-	close(pipex->output_fd);
+	ft_close_fd(pipex->input_fd, pipex->output_fd);
 }
 
-int	main(int ac, char **av)
+int	main(int ac, char **av, char **envp)
 {
 	t_pipex	pipex;
 
@@ -105,7 +114,7 @@ int	main(int ac, char **av)
 		if (dup2(pipex.input_fd, 0) == -1)
 			exit(2);
 		pipex.i = 0;
-		ft_pipex(&pipex, av);
+		ft_pipex(&pipex, av, envp);
 	}
 	return (0);
 }

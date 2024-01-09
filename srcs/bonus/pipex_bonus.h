@@ -6,7 +6,7 @@
 /*   By: mel-rhay <mel-rhay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:58:33 by mel-rhay          #+#    #+#             */
-/*   Updated: 2024/01/06 17:57:39 by mel-rhay         ###   ########.fr       */
+/*   Updated: 2024/01/08 10:17:42 by mel-rhay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,9 @@ typedef struct s_pipex
 
 void	free_2d_array(char **str);
 void	check_here_doc(t_pipex *pipex, char **av, int ac);
+char	**ft_split_command(char *arg);
+void	free_everything(char **tmp, char *command, char *tmp2, char *path);
+void	check_here_doc(t_pipex *pipex, char **av, int ac);
+void	ft_close_fd(int fd1, int fd2);
 
 #endif // Pipex_BONUS.h

@@ -1,0 +1,19 @@
+# Pipe
+
+No, the pipe system call in Unix-like operating systems does not create an actual file on disk. Instead, it creates an in-memory communication channel between two processes. This channel, known as a pipe, is implemented using a buffer in the kernel's memory.
+
+An in-memory communication channel refers to a mechanism where processes can exchange data or communicate with each other using shared memory in the system's RAM (Random Access Memory).
+
+# ENVP IN MAIN
+
+the envp parameter in the main function or in the execve function contains an array of strings, where each string represents an environment variable in the form "variable=value".
+
+# EXECVE
+
+The execve function allows you to specify the exact program to be executed, along with its command-line arguments and environment variables.
+
+The execve function in C is primarily employed for replacing the current process image with a new one. When a program calls execve, it loads a new executable file into the current process, replacing the existing program and its memory space with the new one.
+
+# FORK
+
+The fork system call in Unix-like operating systems is used to create a new process by duplicating the existing (parent) process. After the fork call, there are two identical processes (parent and child), each with its own address space but sharing the same code, data, and file descriptors. The new process is referred to as the child process, and the existing process is the parent process.

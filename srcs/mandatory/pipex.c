@@ -6,35 +6,13 @@
 /*   By: mel-rhay <mel-rhay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:58:16 by mel-rhay          #+#    #+#             */
-/*   Updated: 2024/01/07 20:25:35 by mel-rhay         ###   ########.fr       */
+/*   Updated: 2024/01/08 09:26:25 by mel-rhay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	free_everything(char **tmp, char *command, char *tmp2, char *path)
-{
-	int i;
-
-	i = 0;
-	if (command)
-		free(command);
-	if (tmp2)
-		free(tmp2);
-	if (path)
-		free(path);
-	if (tmp)
-	{
-		while (tmp[i])
-		{
-			free(tmp[i]);
-			i++;
-		}
-		free(tmp);
-	}
-}
-
-int check_envp(char *envp, char **command)
+int	check_envp(char *envp, char **command)
 {
 	char	**tmp;
 	char	*path;
@@ -75,7 +53,7 @@ char	**get_command(char *arg, char **envp)
 				return (command);
 			break ;
 		}
-		envp++;	
+		envp++;
 	}
 	return (command);
 }

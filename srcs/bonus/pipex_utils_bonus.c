@@ -6,7 +6,7 @@
 /*   By: mel-rhay <mel-rhay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:22:20 by mel-rhay          #+#    #+#             */
-/*   Updated: 2024/01/06 20:57:22 by mel-rhay         ###   ########.fr       */
+/*   Updated: 2024/01/08 10:18:46 by mel-rhay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,45 +25,98 @@ void	free_2d_array(char **str)
 	free(str);
 }
 
-void	check_here_doc(t_pipex *pipex, char **av, int ac)
+char	*ft_command_join(char const *s1, char const *s2)
 {
-	int tmp_fd;
-	char *str;
-	char *tmp;
+	int		l1;
+	int		l2;
+	char	*str;
 
-	if (ft_strncmp(av[1], "here_doc", 9) == 0)
+	if (!s1 || !s2)
+		return (NULL);
+	l1 = ft_strlen(s1);
+	l2 = ft_strlen(s2);
+	str = (char *)malloc((l1 + l2 + 1 + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	ft_memcpy(str, s1, l1);
+	str[l1] = ' ';
+	ft_memcpy((str + l1 + 1), s2, l2);
+	str[l1 + l2 + 1] = '\0';
+	return (str);
+}
+
+char	**ft_dup(char **tmp, int count)
+{
+	char	**args;
+	char	*tmp_string;
+	int		i;
+	int		j;
+
+	args = (char **)malloc(sizeof(char *) * (count + 1));
+	i = 0;
+	j = 0;
+	while (tmp[i])
 	{
-		pipex->here_doc = 1;
-		pipex->limiter = av[2];
-		pipex->commands_count = ac - 4;
-		tmp_fd = open("here_doc", O_WRONLY | O_APPEND | O_CREAT, 0777);
-		if (tmp_fd < 0)
-			exit(1);
-		str = get_next_line(0);
-		while (str)
+		if (ft_strchr(tmp[i], '\''))
 		{
-			tmp = ft_strtrim(str, "\n");
-			if (!(ft_strncmp(tmp, av[2], ft_strlen(tmp))))
-			{
-				free(tmp);
-				free(str);
-				break;
-			}
-			write(tmp_fd, str, ft_strlen(str));
-			free(str);
-			free(tmp);
-			str = get_next_line(0);
+			tmp_string = ft_strtrim(tmp[i], "\'");
+			args[j++] = tmp_string;
+			if (tmp[i + 1] && ft_strchr(tmp[i + 1], '\''))
+				i++;
 		}
-		close(tmp_fd);
-		pipex->input_fd = open("here_doc", O_RDONLY, 0777);;
-		unlink("here_doc");
+		else
+			args[j++] = ft_strdup(tmp[i]);
+		i++;
 	}
-	else
+	args[j] = NULL;
+	free_2d_array(tmp);
+	return (args);
+}
+
+char	**ft_split_command(char *arg)
+{
+	char	**tmp;
+	char	*tmp_string;
+	int		i;
+	int		count;
+
+	tmp = ft_split(arg, ' ');
+	i = 0;
+	count = 0;
+	while (tmp[i])
 	{
-		pipex->input_fd = open(av[1], O_RDONLY, 0777);
-		if (pipex->input_fd < 0)
-			exit(1);
-		pipex->commands_count = ac - 3;
-		pipex->here_doc = 0;
+		if (tmp[i + 1] && ft_strchr(tmp[i], '\'') && ft_strchr(tmp[i + 1],
+				'\''))
+		{
+			tmp_string = ft_command_join(tmp[i], tmp[i + 1]);
+			free(tmp[i]);
+			tmp[i] = tmp_string;
+			count++;
+			i++;
+		}
+		i++;
+	}
+	return (ft_dup(tmp, i - count));
+}
+
+void	free_everything(char **tmp, char *command, char *tmp2, char *path)
+{
+	int	i;
+
+	i = 0;
+	if (command)
+		free(command);
+	if (tmp2)
+		free(tmp2);
+	if (path)
+		free(path);
+	if (tmp)
+	{
+		while (tmp[i])
+		{
+			free(tmp[i]);
+			i++;
+		}
+		free(tmp);
 	}
 }
